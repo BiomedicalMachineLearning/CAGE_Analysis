@@ -1,9 +1,6 @@
 # CAGE_Analysis
 The repository is for the analysis of CAGE data generated at the Institute for Molecular Bioscience
 
-# CAGE_Analysis
-The repository is for the analysis of CAGE data generated at the Institute for Molecular Bioscience
-
 ## Useful resources 
 The following resources are useful for the analysis: 
 
