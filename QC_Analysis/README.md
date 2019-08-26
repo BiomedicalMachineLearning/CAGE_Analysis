@@ -15,4 +15,3 @@
 conda activate /your/env
 pip install multiqc 
 ```
-	* Run fastqc and multiqc (note multiqc duplicated reads are applied for mapped files like bam files not single-end read fastq files)                                                                                                                                     

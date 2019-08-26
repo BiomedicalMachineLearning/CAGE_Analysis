@@ -6,5 +6,6 @@
 wdir=/path/to/workingdir
 cd $wdir
 
+#load bcl2fastq or make sure the installed program is callable as bcl2fastq 
 module load bcl2fastq/2.17
 bcl2fastq --runfolder-dir ./path/to/BCL/Files  -p 16 --output-dir $wdir/fastq_files --no-lane-splitting
