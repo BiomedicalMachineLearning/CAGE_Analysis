@@ -15,4 +15,10 @@
 		conda activate /your/env
 		pip install multiqc 
 		```
-	* Note the multiqc report on duplicated reads is not applicable for single-end sequencing data 
+	* Note the multiqc report on duplicated reads is not applicable for single-end sequencing data
+
+## Optional steps  
+* moirai20140528/bin/trimBaseN removes N at the end of the reads 
+* TagDust removes reads similar to primer dimers, linker sequences and other artifacts <http://tagdust.sourceforge.net/>
+* rRNAdust removes reads matching ribosomal RNA sequences <http://fantom.gsc.riken.jp/5/suppl/rRNAdust/>
+
