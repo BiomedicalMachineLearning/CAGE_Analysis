@@ -6,7 +6,7 @@ The following resources are useful for the analysis:
 
 #### CAGEr
 * Software link: https://bioconductor.org/packages/release/bioc/html/CAGEr.html 
-* Paper link: 
+* Paper link: https://academic.oup.com/nar/article/43/8/e51/2414172
 
 #### CAGEfightR
 * Software link: https://bioconductor.org/packages/release/bioc/html/CAGEfightR.html
