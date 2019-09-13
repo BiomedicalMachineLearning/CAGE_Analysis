@@ -19,6 +19,7 @@ rm *bed1
 # transform bedGraph to BigWig
 for file in *.bedGraph; do name5=`basename $file .bedGraph`; grep 'chr' $file | sort -k1,1 -k2,2n > ${name5}.sorted.bedGraph; done
 for file in *.bedGraph; do name6=`basename $file .bedGraph`; ~/jon/app/bedGraphToBigWig $file ~/jon/app/hg38.chrom.sizes ${name6}.bw; done
+rm *sorted.bedGraph
 
 # find enhancers using CAGEfightR
 module load R/3.6.0.a
