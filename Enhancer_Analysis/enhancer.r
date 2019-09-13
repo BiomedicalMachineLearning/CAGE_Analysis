@@ -1,25 +1,16 @@
 library(CAGEfightR)
 genomeInfo <- SeqinfoForUCSCGenome("hg38")
+files <- list.files()
 
 # Quantify CAGE TSSs
-bw_plus <- BigWigFileList(c('ESC_0980_S1_R1_001.ctss_all_q10_CSC.pos.bw', 
-                            'ESC_1041_S2_R1_001.ctss_all_q10_CSC.pos.bw', 
-                            'ESC_1067_S3_R1_001.ctss_all_q10_CSC.pos.bw', 
-                            'ESC_1156_S4_R1_001.ctss_all_q10_CSC.pos.bw',
-                            'ESC_1271_S5_R1_001.ctss_all_q10_CSC.pos.bw', 
-                            'ESC_1369_S6_R1_001.ctss_all_q10_CSC.pos.bw',
-                            'ESC_1412_S7_R1_001.ctss_all_q10_CSC.pos.bw', 
-                            'ESC_1575_S8_R1_001.ctss_all_q10_CSC.pos.bw'))
-bw_minus <- BigWigFileList(c('ESC_0980_S1_R1_001.ctss_all_q10_CSC.neg.bw', 
-                             'ESC_1041_S2_R1_001.ctss_all_q10_CSC.neg.bw', 
-                             'ESC_1067_S3_R1_001.ctss_all_q10_CSC.neg.bw', 
-                             'ESC_1156_S4_R1_001.ctss_all_q10_CSC.neg.bw',
-                             'ESC_1271_S5_R1_001.ctss_all_q10_CSC.neg.bw', 
-                             'ESC_1369_S6_R1_001.ctss_all_q10_CSC.neg.bw',
-                             'ESC_1412_S7_R1_001.ctss_all_q10_CSC.neg.bw', 
-                             'ESC_1575_S8_R1_001.ctss_all_q10_CSC.neg.bw'))
-names(bw_plus) <- c('0980','1041','1067','1156','1271','1369','1412','1575')
-names(bw_minus) <- c('0980','1041','1067','1156','1271','1369','1412','1575')
+
+# this script will read all .bw files in the working directory, make sure no redundant files are there
+bw_plus <- files[grep('.pos.bw', files)]
+bw_minus <- files[grep('.neg.bw', files)]
+
+# users can customise how many characters to be taken as sample names
+names(bw_plus) <- substr(bw_plus,5,8)
+names(bw_minus) <- substr(bw_minus,5,8)
 CTSSs <- quantifyCTSSs(plusStrand = bw_plus, minusStrand = bw_minus, genome = genomeInfo)
 
 # Find enhancers
