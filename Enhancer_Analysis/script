@@ -1,0 +1,22 @@
+#!/bin/sh
+#PBS -q normal
+#PBS -N "enhancer"
+#PBS -l select=1:ncpus=12:mem=50GB
+#PBS -l walltime=8:00:00
+
+#PBS -e /home/jun.xu/logs
+#PBS -o /home/jun.xu/logs
+
+cd ~/jon/cage/
+
+# transform bed to bedGraph and BigWig
+for file in *.bed; do name1=`basename $file .bed`; grep '+' $file > ${name1}.pos.bed1; done
+for file in *.bed; do name2=`basename $file .bed`; grep '-' $file > ${name2}.neg.bed1; done
+for file in *pos.bed1; do name3=`basename $file .bed1`; cut -f1,2,3,5 $file | grep -v '^G' | grep -v '^K' | sed 's/^/chr/g' | sort -k1,1 -k2,2n > ${name3}.bedGraph; done
+for file in *neg.bed1; do name4=`basename $file .bed1`; cut -f1,2,3,5 $file | grep -v '^G' | grep -v '^K' | sed 's/^/chr/g' | sort -k1,1 -k2,2n > ${name4}.bedGraph; done
+rm *bed1
+for file in *.bedGraph; do name5=`basename $file .bedGraph`; ~/jon/app/bedGraphToBigWig $file ~/jon/app/hg38.chrom.sizes ${name5}.bw; done
+
+# find enhancers using CAGEfightR
+module load R/3.6.0.a
+Rscript enhancer.r
