@@ -9,13 +9,16 @@
 
 cd ~/jon/cage/
 
-# transform bed to bedGraph and BigWig
+# transform bed to bedGraph
 for file in *.bed; do name1=`basename $file .bed`; grep '+' $file > ${name1}.pos.bed1; done
 for file in *.bed; do name2=`basename $file .bed`; grep '-' $file > ${name2}.neg.bed1; done
-for file in *pos.bed1; do name3=`basename $file .bed1`; cut -f1,2,3,5 $file | grep -v '^G' | grep -v '^K' | sed 's/^/chr/g' | sort -k1,1 -k2,2n > ${name3}.bedGraph; done
-for file in *neg.bed1; do name4=`basename $file .bed1`; cut -f1,2,3,5 $file | grep -v '^G' | grep -v '^K' | sed 's/^/chr/g' | sort -k1,1 -k2,2n > ${name4}.bedGraph; done
+for file in *pos.bed1; do name3=`basename $file .bed1`; cut -f1,2,3,5 $file | grep -v '^G' | grep -v '^K' | sed 's/^/chr/g' > ${name3}.bedGraph; done
+for file in *neg.bed1; do name4=`basename $file .bed1`; cut -f1,2,3,5 $file | grep -v '^G' | grep -v '^K' | sed 's/^/chr/g' > ${name4}.bedGraph; done
 rm *bed1
-for file in *.bedGraph; do name5=`basename $file .bedGraph`; ~/jon/app/bedGraphToBigWig $file ~/jon/app/hg38.chrom.sizes ${name5}.bw; done
+
+# transform bedGraph to BigWig
+for file in *.bedGraph; do name5=`basename $file .bedGraph`; grep 'chr' $file | sort -k1,1 -k2,2n > ${name5}.sorted.bedGraph; done
+for file in *.bedGraph; do name6=`basename $file .bedGraph`; ~/jon/app/bedGraphToBigWig $file ~/jon/app/hg38.chrom.sizes ${name6}.bw; done
 
 # find enhancers using CAGEfightR
 module load R/3.6.0.a
