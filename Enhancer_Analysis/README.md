@@ -3,4 +3,5 @@
 2) run R script enhancer.r to find enhancers (this script will use all .bw files in the working directory as input, make sure no redundant files are there)
 
 For step 1, you will need the bedGraphToBigWig tool, which can be downloaded here: http://hgdownload.soe.ucsc.edu/admin/exe/
-And for step 2, you need to install CAGEfightR using: BiocManager::install('CAGEfightR')
+
+For step 2, you need to install CAGEfightR using: BiocManager::install('CAGEfightR')
