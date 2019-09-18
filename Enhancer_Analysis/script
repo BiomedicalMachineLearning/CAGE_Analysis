@@ -10,10 +10,10 @@
 cd ~/jon/cage/
 
 # transform bed to bedGraph
-for file in *.bed; do name1=`basename $file .bed`; grep '+' $file > ${name1}.pos.bed1; done
-for file in *.bed; do name2=`basename $file .bed`; grep '-' $file > ${name2}.neg.bed1; done
-for file in *pos.bed1; do name3=`basename $file .bed1`; cut -f1,2,3,5 $file | grep -v '^G' | grep -v '^K' | sed 's/^/chr/g' > ${name3}.bedGraph; done
-for file in *neg.bed1; do name4=`basename $file .bed1`; cut -f1,2,3,5 $file | grep -v '^G' | grep -v '^K' | sed 's/^/chr/g' > ${name4}.bedGraph; done
+for file in *.bed; do name1=`basename $file .bed`; grep '+' $file > ${name1}.plus.bed1; done
+for file in *.bed; do name2=`basename $file .bed`; grep '-' $file > ${name2}.minus.bed1; done
+for file in *plus.bed1; do name3=`basename $file .bed1`; cut -f1,2,3,5 $file | grep -v '^G' | grep -v '^K' | sed 's/^/chr/g' > ${name3}.bedGraph; done
+for file in *minus.bed1; do name4=`basename $file .bed1`; cut -f1,2,3,5 $file | grep -v '^G' | grep -v '^K' | sed 's/^/chr/g' > ${name4}.bedGraph; done
 rm *bed1
 
 # transform bedGraph to BigWig
