@@ -22,4 +22,12 @@ txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 enhancers <- assignTxType(enhancers, txModels=txdb)
 enhancers <- subset(enhancers, txType %in% c("intergenic", "intron"))
 
+# build bedGraph files
+bedgraph <- matrix(,nrow(enhancers),4)
+bedgraph[,1] <- sapply(rownames(enhancers), function(x) strsplit(x, ':')[[1]][1])
+bedgraph[,2] <- sapply(rownames(enhancers), function(x) strsplit(strsplit(x, ':')[[1]][2], '-')[[1]][1])
+bedgraph[,3] <- sapply(rownames(enhancers), function(x) strsplit(strsplit(x, ':')[[1]][2], '-')[[1]][2])
+bedgraph[,4] <- rowData(enhancers)[,1]
+
+write.table(bedgraph,'enhancers.bedGraph',sep='\t',row.names=FALSE,col.names=FALSE,quote=FALSE)
 saveRDS(enhancers, 'enhancers.RDS')
