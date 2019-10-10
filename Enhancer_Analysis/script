@@ -9,18 +9,26 @@
 
 cd ~/jon/cage/
 
-# transform bed to bedGraph
-for file in *.bed; do name1=`basename $file .bed`; grep '+' $file > ${name1}.plus.bed1; done
-for file in *.bed; do name2=`basename $file .bed`; grep '-' $file > ${name2}.minus.bed1; done
-for file in *plus.bed1; do name3=`basename $file .bed1`; cut -f1,2,3,5 $file | grep -v '^G' | grep -v '^K' | sed 's/^/chr/g' > ${name3}.bedGraph; done
-for file in *minus.bed1; do name4=`basename $file .bed1`; cut -f1,2,3,5 $file | grep -v '^G' | grep -v '^K' | sed 's/^/chr/g' > ${name4}.bedGraph; done
+# transform bed to bedGraph and BigWig
+for file in *.bed; do name1=`basename $file .bed`; grep '+' $file > ${name1}.pos.bed1; done
+for file in *.bed; do name2=`basename $file .bed`; grep '-' $file > ${name2}.neg.bed1; done
+for file in *pos.bed1; do name3=`basename $file .bed1`; cut -f1,2,3,5 $file | grep -v '^G' | grep -v '^K' | sed 's/^/chr/g' | sort -k1,1 -k2,2n > ${name3}.bedGraph; done
+for file in *neg.bed1; do name4=`basename $file .bed1`; cut -f1,2,3,5 $file | grep -v '^G' | grep -v '^K' | sed 's/^/chr/g' | sort -k1,1 -k2,2n > ${name4}.bedGraph; done
 rm *bed1
-
-# transform bedGraph to BigWig
-for file in *.bedGraph; do name5=`basename $file .bedGraph`; grep 'chr' $file | sort -k1,1 -k2,2n > ${name5}.sorted.bedGraph; done
-for file in *.bedGraph; do name6=`basename $file .bedGraph`; ~/jon/app/bedGraphToBigWig $file ~/jon/app/hg38.chrom.sizes ${name6}.bw; done
-rm *sorted.bedGraph
+for file in *.bedGraph; do name5=`basename $file .bedGraph`; ~/jon/app/bedGraphToBigWig $file ~/jon/app/hg38.chrom.sizes ${name5}.bw; done
 
 # find enhancers using CAGEfightR
 module load R/3.6.0.a
-Rscript enhancer.r
+Rscript enhancers.r
+
+# convert bedGraph to bed
+cat enhancers.bedGraph | awk '{print $1 "\t" $2 "\t" $3}' | bedtools sort -i > enhancers.bed
+
+# get sorted genes.bed
+cut -f1-18 ../genes.bed | bedtools sort -i > genes.bed
+
+# check closest genes near enhancers
+bedtools closest -k 2 -header -a enhancers.bed -b genes.bed > enhancers_closest_genes.txt
+
+# filter closest genes with active enhancers
+Rscript active_enhancers.r
